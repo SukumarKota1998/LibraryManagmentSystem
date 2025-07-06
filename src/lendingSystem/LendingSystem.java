@@ -5,6 +5,7 @@ import book.Book;
 import patron.Patron;
 import searchStrategy.SearchByAuthor;
 import searchStrategy.SearchByISBN;
+import searchStrategy.SearchStrategy;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -15,12 +16,12 @@ public class LendingSystem {
 
     private final List<LendingDetails> lendingDetailsList = new ArrayList<>();
 
-    public String lendBook(Book book, Patron patron, Inventory inventory) {
-        boolean isBook1Available = new Inventory().isBookAvailable(new SearchByISBN(), book.getIsbn(), inventory);
+    public String lendBook(Book book, Patron patron, Inventory inventory, SearchStrategy searchStrategy) {
+        boolean isBook1Available = new Inventory().isBookAvailable(searchStrategy, book, inventory);
         if (!isBook1Available) return "Book is not available";
 
         lendingDetailsList.add(new LendingDetails(Map.of(patron, book)));
-        new Inventory().removeBook(book);
+        inventory.removeBook(book);
         new Patron().addBorrowingHistory(book, patron);
 
         return  book.getTitle() + " was given to " + patron.getName() + " at " + LocalDateTime.now();

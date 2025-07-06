@@ -71,8 +71,21 @@ public class Patron {
         this.phoneNumber = phoneNumber;
     }
 
-    public Map<BookCategory, Map<String, String>> getBorrowingHistory() {
-        return borrowingHistory;
+    public void displayBorrowingHistory() {
+        if (borrowingHistory.isEmpty()) {
+            System.out.println("No borrowing history available for " + name);
+            return;
+        }
+
+        System.out.println("Borrowing History for " + name + ":");
+        for (Map.Entry<BookCategory, Map<String, String>> entry : borrowingHistory.entrySet()) {
+            BookCategory category = entry.getKey();
+            Map<String, String> books = entry.getValue();
+            System.out.println("Category: " + category);
+            for (Map.Entry<String, String> bookEntry : books.entrySet()) {
+                System.out.println("Author: " + bookEntry.getKey() + ", Title: " + bookEntry.getValue());
+            }
+        }
     }
 
     public void setBorrowingHistory(Map<BookCategory, Map<String, String>> borrowingHistory) {
